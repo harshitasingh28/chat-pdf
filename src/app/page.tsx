@@ -4,12 +4,25 @@ import { auth } from "@clerk/nextjs/server";
 import { Heading1, LogIn } from "lucide-react";
 import Link from "next/link";
 import FileUpload from "@/components/FileUpload";
-
+import { db } from "@/lib/db";
+import { chats } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
 
 export default async function Home() {
   const { userId } = await auth();
   const isAuth = !!userId;
+  let firstChat = null;
 
+if (userId) {
+  const userChats = await db
+    .select()
+    .from(chats)
+    .where(eq(chats.userId, userId));
+
+  if (userChats.length > 0) {
+    firstChat = userChats[0];
+  }
+}
   return (
     <div className="w-screen min-h-screen bg-gradient-to-r from-rose-200 to-teal-200">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full px-4">
@@ -21,9 +34,11 @@ export default async function Home() {
           </div>
 
           {/* Go to Chats */}
-          {isAuth && (
+          {isAuth && firstChat && (
             <div className="mt-3">
-              <Button>Go to Chats</Button>
+              <Link href={`/chat/${firstChat.id}`}>
+                <Button>Go to Chats</Button>
+              </Link>
             </div>
           )}
 
