@@ -1,9 +1,7 @@
-import { OllamaEmbeddings } from "@langchain/ollama";
-
-// connect to local Ollama server
-const embeddings = new OllamaEmbeddings({
-  model: "nomic-embed-text",
-  baseUrl: "http://127.0.0.1:11434",
+import { CohereEmbeddings } from "@langchain/cohere";
+const embeddings = new CohereEmbeddings({
+apiKey: process.env.COHERE_API_KEY!,
+model: "embed-english-light-v3.0", // free, 384 dims
 });
 
 // main function used by your app

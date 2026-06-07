@@ -2,15 +2,15 @@ import { getContext } from "@/lib/context";
 import { db } from "@/lib/db";
 import { chats, messages as _message } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
-import { createOpenAI } from "@ai-sdk/openai";
+import { createGroq } from "@ai-sdk/groq";
 import { NextResponse } from "next/server";
 import { generateText } from "ai";
 
 export const runtime = "nodejs";
 
-const ollama = createOpenAI({
-  baseURL: "http://127.0.0.1:11434/v1",
-  apiKey: "ollama",
+// ✅ REPLACE WITH THIS
+const groq = createGroq({
+  apiKey: process.env.GROQ_API_KEY!,
 });
 
 export async function POST(req: Request) {
@@ -65,7 +65,7 @@ Do not invent information.
     ];
 
     const result = await generateText({
-      model: ollama("llama3"),
+      model: groq("llama-3.1-8b-instant"),
       messages: finalMessages,
     });
 

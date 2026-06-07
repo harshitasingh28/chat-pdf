@@ -9,8 +9,7 @@ export async function getMatchesFromEmbeddings(
 
   const pinecone = await getPineconeClient();
 
-  const index = pinecone.Index("chatpdf-ollama");
-
+  const index = pinecone.Index(process.env.PINECONE_INDEX_NAME!);
   try {
 
     const namespace = convertToAscii(fileKey);
@@ -49,7 +48,7 @@ console.log("Matches:", matches);
 
 
   const qualifyingDocs = matches.filter(
-    (match) => match.score && match.score > 0.3
+    (match) => match.score && match.score > -0.1
   );
 
   type Metadata = {

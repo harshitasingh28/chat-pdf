@@ -48,7 +48,7 @@ export async function loadS3IntoPinecone(fileKey: string) {
 
   // 4. upload to pinecone
   const client = await getPineconeClient();
-  const pineconeIndex: Index = await client.index("chatpdf-ollama");
+  const pineconeIndex: Index = client.index(process.env.PINECONE_INDEX_NAME!);
   const namespace = pineconeIndex.namespace(convertToAscii(fileKey));
 
   console.log("Pages count:", pages.length);
