@@ -94,35 +94,26 @@ const ChatComponent = ({ chatId }: Props) => {
   }, [messages]);
 
   return (
-    <div
-      id="message-container"
-      className="relative max-h-screen overflow-y-auto"
-    >
-      <div className="sticky top-0 inset-x-0 p-2 bg-white border-b">
-        <h3 className="text-xl font-bold">Chat</h3>
-      </div>
-
-      <div className="p-4">
-        <MessageList messages={messages} isLoading={isLoading} />
-      </div>
-
-      <form
-        onSubmit={handleSubmit}
-        className="sticky bottom-0 inset-x-0 px-2 py-4 bg-white flex border-t"
-      >
-        <Input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask any question about the PDF..."
-          className="w-full"
-        />
-
-        <Button type="submit" className="bg-blue-600 ml-2">
-          <Send className="h-4 w-4" />
-        </Button>
-      </form>
+  <div className="flex flex-col min-h-0 h-full">
+    <div className="p-2 bg-white border-b shrink-0">
+      <h3 className="text-xl font-bold">Chat</h3>
     </div>
-  );
+    <div id="message-container" className="flex-1 min-h-0 overflow-y-auto p-4">
+      <MessageList messages={messages} isLoading={isLoading} />
+    </div>
+    <form onSubmit={handleSubmit} className="shrink-0 px-2 py-4 bg-white flex border-t">
+      <Input
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Ask any question about the PDF..."
+        className="w-full"
+      />
+      <Button type="submit" className="bg-blue-600 ml-2">
+        <Send className="h-4 w-4" />
+      </Button>
+    </form>
+  </div>
+);
 };
 
 export default ChatComponent;

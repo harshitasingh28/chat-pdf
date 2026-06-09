@@ -9,52 +9,52 @@ interface Props {
 }
 
 const MessageList = ({ messages, isLoading }: Props) => {
-  if(isLoading){
-    return(
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-        <Loader2 className="w-6 h-6 animate-spin"/>
-      </div>
-    )
-  }
+  
   if (!messages) return null;
 
   return (
-    <div className="flex flex-col gap-3 px-4">
-      {messages.map((message) => {
+  <div className="flex flex-col gap-3 px-4">
+    {messages.map((message) => {
+      let text = "";
 
-        let text = "";
+      if (message.parts && Array.isArray(message.parts)) {
+        text = message.parts
+          .map((part: any) => part.text || "")
+          .join("");
+      }
 
-        // extract text safely
-        if (message.parts && Array.isArray(message.parts)) {
-          text = message.parts
-            .map((part: any) => part.text || "")
-            .join("");
-        }
-
-        return (
+      return (
+        <div
+          key={message.id}
+          className={cn("flex", {
+            "justify-end": message.role === "user",
+            "justify-start": message.role === "assistant",
+          })}
+        >
           <div
-            key={message.id}
-            className={cn("flex", {
-              "justify-end": message.role === "user",
-              "justify-start": message.role === "assistant",
-            })}
+            className={cn(
+              "max-w-[70%] rounded-lg px-4 py-2 text-sm",
+              {
+                "bg-blue-600 text-white": message.role === "user",
+                "bg-gray-200 text-black": message.role === "assistant",
+              }
+            )}
           >
-            <div
-              className={cn(
-                "max-w-[70%] rounded-lg px-4 py-2 text-sm",
-                {
-                  "bg-blue-600 text-white": message.role === "user",
-                  "bg-gray-200 text-black": message.role === "assistant",
-                }
-              )}
-            >
-              {text}
-            </div>
+            {text}
           </div>
-        );
-      })}
-    </div>
-  );
+        </div>
+      );
+    })}
+
+    {isLoading && (
+      <div className="flex justify-start">
+        <div className="bg-gray-200 rounded-lg px-4 py-2">
+          <Loader2 className="w-4 h-4 animate-spin" />
+        </div>
+      </div>
+    )}
+  </div>
+);
 };
 
 export default MessageList;
