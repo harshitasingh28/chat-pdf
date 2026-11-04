@@ -20,6 +20,19 @@ export async function downloadFromS3(file_key: string){
         const obj = await s3.getObject(params).promise()
         const file_name = `/tmp/pdf-${Date.now()}.pdf`
         fs.writeFileSync(file_name, obj.Body as Buffer)
+        fs.writeFileSync(file_name, obj.Body as Buffer);
+
+const stats = fs.statSync(file_name);
+const downloadedBuffer = fs.readFileSync(file_name);
+
+console.log("Downloaded file size:", stats.size);
+console.log(
+  "Downloaded PDF header:",
+  downloadedBuffer.subarray(0, 5).toString()
+);
+
+console.log("S3 content type:", obj.ContentType);
+console.log("S3 content length:", obj.ContentLength);
         return file_name
     }catch(error){
         console.error(error)
