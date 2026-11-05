@@ -65,7 +65,7 @@ Do not invent information.
     ];
 
     const result = await generateText({
-      model: groq("llama-3.1-8b-instant"),
+      model: groq("openai/gpt-oss-20b"),
       messages: finalMessages,
     });
 
